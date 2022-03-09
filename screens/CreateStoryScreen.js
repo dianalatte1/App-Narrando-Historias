@@ -13,7 +13,7 @@ const CreateStoryScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  //Aquí van todos los estislos para tu componente
+  //Aquí van todos los estilos para tu componente
   container: {
     flex: 1,
     justifyContent: "center",
