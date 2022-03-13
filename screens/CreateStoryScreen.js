@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,9 @@ import {
   Image,
   Platform,
   StatusBar,
+  ScrollView,
+  TextInput,
+  Dimensions,
 } from "react-native";
 //todas las librerias que necesites para tu componente
 import { RFValue } from "react-native-responsive-fontsize";
@@ -18,14 +21,19 @@ const CreateStoryScreen = (props) => {
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
-
-  renderItem = ({ item: story }) => {
-    return <StoryCard story={story} />;
-  };
+  const [previewImage, setPreviewImage] = useState("image_1");
+  const [dropDownHeight, setDropDownHeight] = useState(40);
 
   if (!loaded) {
     return <AppLoading />;
   } else {
+    let preview_images = {
+      image_1: require("../assets/story_image_1.png"),
+      image_2: require("../assets/story_image_2.png"),
+      image_3: require("../assets/story_image_3.png"),
+      image_4: require("../assets/story_image_4.png"),
+      image_5: require("../assets/story_image_5.png"),
+    };
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
@@ -40,6 +48,19 @@ const CreateStoryScreen = (props) => {
             <Text style={styles.appTitleText}>Nueva Historia</Text>
           </View>
         </View>
+        <View>
+          <ScrollView>
+            <Image></Image>
+            <View>
+              <DropDownPicker />
+            </View>
+            <TextInput />
+            <TextInput />
+            <TextInput />
+            <TextInput />
+          </ScrollView>
+        </View>
+        <View />
       </View>
     );
   }
