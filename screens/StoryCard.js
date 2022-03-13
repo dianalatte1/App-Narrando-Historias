@@ -1,18 +1,10 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Platform,
-  StatusBar,
-  Image,
-  Dimensions,
-} from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { useFonts } from "expo-font";
 
 import AppLoading from "expo-app-loading";
-
+import { RFValue } from "react-native-responsive-fontsize";
+import Ionicons from "react-native-vector-icons/Ionicons";
 const StoryCard = (props) => {
   //Aquí va toda la funcionalidad que quieras para tu
   //componente
@@ -32,12 +24,10 @@ const StoryCard = (props) => {
           ></Image>
 
           <View style={styles.titleContainer}>
-            <Text style={styles.storyTitleText}>{this.props.story.title}</Text>
-            <Text style={styles.storyAuthorText}>
-              {this.props.story.author}
-            </Text>
+            <Text style={styles.storyTitleText}>{props.story.title}</Text>
+            <Text style={styles.storyAuthorText}>{props.story.author}</Text>
             <Text style={styles.descriptionText}>
-              {this.props.story.description}
+              {props.story.description}
             </Text>
           </View>
           <View style={styles.actionContainer}>
@@ -56,8 +46,6 @@ const styles = StyleSheet.create({
   //Aquí van todos los estilos para tu componente
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   cardContainer: {
     margin: RFValue(13),

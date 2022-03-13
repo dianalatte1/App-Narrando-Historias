@@ -1,20 +1,27 @@
 import React from "react";
-import { View, Text, StyleSheet, SafeAreaView, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  StatusBar,
+  Platform,
+} from "react-native";
 //todas las librerias que necesites para tu componente
 import { useFonts } from "expo-font";
-import { RFValue } from "react-native-responsive-fontsize";
 import AppLoading from "expo-app-loading";
 import { FlatList } from "react-native-gesture-handler";
 import StoryCard from "./StoryCard";
 
 const FeedScreen = (props) => {
-  //Aquí va toda la funcionalidad que quieras para tu
-  //componente
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
 
   let stories = require("./temp.json");
+  //Aquí va toda la funcionalidad que quieras para tu
+  //componente
 
   renderItem = ({ item: story }) => {
     return <StoryCard story={story} />;
@@ -28,7 +35,6 @@ const FeedScreen = (props) => {
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
-
         <View style={styles.appTitle}>
           <View style={styles.appIcon}>
             <Image
@@ -58,38 +64,40 @@ const styles = StyleSheet.create({
   //Aquí van todos los estilos para tu componente
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#15193c",
   },
   droidSafeArea: {
-    marginTop:
-      Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35),
+    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   appTitle: {
     flex: 0.07,
     flexDirection: "row",
+    flexWrap: "wrap",
+    padding: 5,
   },
   appIcon: {
     flex: 0.3,
+  },
+  iconImage: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain",
+    marginLeft: 10,
+  },
+  appTitleTextContainer: {
+    // flex: 0.7,
     justifyContent: "center",
     alignItems: "center",
   },
-  iconImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-  },
-  appTitleTextContainer: {
-    flex: 0.7,
-    justifyContent: "center",
-  },
   appTitleText: {
     color: "white",
-    fontSize: RFValue(28),
+    fontSize: 28,
     fontFamily: "Bubblegum-Sans",
+    paddingLeft: 20,
+    // flexShrink: 1,
   },
   cardContainer: {
-    flex: 0.93,
+    flex: 0.85,
   },
 });
 //No olvides exportar tu componente
