@@ -5,35 +5,45 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { RFValue } from "react-native-responsive-fontsize";
 import Ionicons from "react-native-vector-icons/Ionicons";
+
 const StoryCard = (props) => {
-  //Aquí va toda la funcionalidad que quieras para tu
-  //componente
+  //Ya hemos cargado la fuente!!! :D
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
-
+  //mostramos cargando
   if (!loaded) {
     return <AppLoading />;
   } else {
+    // si ya se cargo la fuente mostramos nuestro inicio
     return (
       <View style={styles.container}>
-        <View style={styles.cardContainer}>
-          <Image
-            source={require("../assets/story_image_1.png")}
-            style={styles.storyImage}
-          ></Image>
+        <View>
+          {/* El view de arriba tendra cardContainer */}
 
-          <View style={styles.titleContainer}>
-            <Text style={styles.storyTitleText}>{props.story.title}</Text>
-            <Text style={styles.storyAuthorText}>{props.story.author}</Text>
-            <Text style={styles.descriptionText}>
-              {props.story.description}
+          <View>
+            {/* El view de arriba tendra storyImage */}
+            {/* Dentro de este view tendremos una imagen */}
+            {/* Esta imagen tendra el estilo storyImage */}
+          </View>
+          <View>
+            {/* El view de arriba tendra el stilo titleContainer */}
+            <Text>{/* estilo:storyTitleText, pasa props.story.title, */}</Text>
+            <Text>
+              {/* estilo:storyAuthorText, pasa props.story.author, */}
+            </Text>
+            <Text>
+              {/* estilo:descriptionText, pasa props.story.description, */}
             </Text>
           </View>
-          <View style={styles.actionContainer}>
-            <View style={styles.likeButton}>
-              <Ionicons name={"heart"} size={RFValue(30)} color={"white"} />
-              <Text style={styles.likeText}>12m</Text>
+          <View>
+            {/* El view de arriba tendra el stilo actionContainer */}
+            <View>
+              {/* El view de arriba tendra el stilo likeButton */}
+              <Ionicons
+              // El nombre del icono: 'heart', size:30, color: blanco
+              />
+              <Text>{/* estilo: likeText */}</Text>
             </View>
           </View>
         </View>
@@ -43,7 +53,8 @@ const StoryCard = (props) => {
 };
 
 const styles = StyleSheet.create({
-  //Aquí van todos los estilos para tu componente
+  //Pista: estos son los estilos que necesitaras para
+  // mostrar el inicio
   container: {
     flex: 1,
   },
