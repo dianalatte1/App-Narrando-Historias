@@ -23,11 +23,11 @@ const FeedScreen = (props) => {
   //Aquí va toda la funcionalidad que quieras para tu
   //componente
 
-  renderItem = ({ item: story }) => {
+  const renderItem = ({ item: story }) => {
     return <StoryCard story={story} />;
   };
 
-  keyExtractor = (item, index) => index.toString();
+  const keyExtractor = (item, index) => index.toString();
 
   if (!loaded) {
     return <AppLoading />;

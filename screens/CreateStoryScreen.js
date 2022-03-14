@@ -28,6 +28,14 @@ const CreateStoryScreen = (props) => {
   const [description, setDescription] = useState("");
   const [moral, setMoral] = useState("");
   const [story, setStory] = useState("");
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([
+    { label: "Image 1", value: "image_1" },
+    { label: "Image 2", value: "image_2" },
+    { label: "Image 3", value: "image_3" },
+    { label: "Image 4", value: "image_4" },
+    { label: "Image 5", value: "image_5" },
+  ]);
   if (!loaded) {
     return <AppLoading />;
   } else {
@@ -60,13 +68,12 @@ const CreateStoryScreen = (props) => {
             ></Image>
             <View style={{ height: RFValue(dropDownHeight) }}>
               <DropDownPicker
-                items={[
-                  { label: "Image 1", value: "image_1" },
-                  { label: "Image 2", value: "image_2" },
-                  { label: "Image 3", value: "image_3" },
-                  { label: "Image 4", value: "image_4" },
-                  { label: "Image 5", value: "image_5" },
-                ]}
+                items={items}
+                setItems={setItems}
+                open={open}
+                setOpen={setOpen}
+                setValue={setPreviewImage}
+                listMode={"SCROLLVIEW"}
                 defaultValue={previewImage}
                 containerStyle={{
                   height: 40,
@@ -79,7 +86,7 @@ const CreateStoryScreen = (props) => {
                 onClose={() => {
                   setDropDownHeight(40);
                 }}
-                style={{ backgroundColor: "transparent" }}
+                // style={{ backgroundColor: "transparent" }}
                 itemStyle={{
                   justifyContent: "flex-start",
                 }}
