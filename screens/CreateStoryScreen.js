@@ -74,10 +74,10 @@ const CreateStoryScreen = (props) => {
                   marginBottom: 10,
                 }}
                 onOpen={() => {
-                  setDropDownHeight({ dropdownHeight: 170 });
+                  setDropDownHeight(170);
                 }}
                 onClose={() => {
-                  setDropDownHeight({ dropdownHeight: 40 });
+                  setDropDownHeight(40);
                 }}
                 style={{ backgroundColor: "transparent" }}
                 itemStyle={{
@@ -92,11 +92,7 @@ const CreateStoryScreen = (props) => {
                   color: "white",
                   fontFamily: "Bubblegum-Sans",
                 }}
-                onChangeItem={(item) =>
-                  setPreviewImage({
-                    previewImage: item.value,
-                  })
-                }
+                onValueChange={(item) => setPreviewImage(item.value)}
               />
             </View>
             <TextInput
@@ -191,6 +187,7 @@ const styles = StyleSheet.create({
   // Estos estilos se agregaron despues
   fieldsContainer: {
     flex: 0.85,
+    height: 5,
   },
   previewImage: {
     width: "93%",
