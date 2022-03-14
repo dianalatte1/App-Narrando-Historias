@@ -15,6 +15,7 @@ import {
 import { RFValue } from "react-native-responsive-fontsize";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const CreateStoryScreen = (props) => {
   //cargamos la fuente aqui
@@ -23,7 +24,10 @@ const CreateStoryScreen = (props) => {
   });
   const [previewImage, setPreviewImage] = useState("image_1");
   const [dropDownHeight, setDropDownHeight] = useState(40);
-
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [moral, setMoral] = useState("");
+  const [story, setStory] = useState("");
   if (!loaded) {
     return <AppLoading />;
   } else {
@@ -48,19 +52,104 @@ const CreateStoryScreen = (props) => {
             <Text style={styles.appTitleText}>Nueva Historia</Text>
           </View>
         </View>
-        <View>
+        <View style={styles.fieldsContainer}>
           <ScrollView>
-            <Image></Image>
-            <View>
-              <DropDownPicker />
+            <Image
+              source={preview_images[previewImage]}
+              style={styles.previewImage}
+            ></Image>
+            <View style={{ height: RFValue(dropDownHeight) }}>
+              <DropDownPicker
+                items={[
+                  { label: "Image 1", value: "image_1" },
+                  { label: "Image 2", value: "image_2" },
+                  { label: "Image 3", value: "image_3" },
+                  { label: "Image 4", value: "image_4" },
+                  { label: "Image 5", value: "image_5" },
+                ]}
+                defaultValue={previewImage}
+                containerStyle={{
+                  height: 40,
+                  borderRadius: 20,
+                  marginBottom: 10,
+                }}
+                onOpen={() => {
+                  setDropDownHeight({ dropdownHeight: 170 });
+                }}
+                onClose={() => {
+                  setDropDownHeight({ dropdownHeight: 40 });
+                }}
+                style={{ backgroundColor: "transparent" }}
+                itemStyle={{
+                  justifyContent: "flex-start",
+                }}
+                dropDownStyle={{ backgroundColor: "#2f345d" }}
+                labelStyle={{
+                  color: "white",
+                  fontFamily: "Bubblegum-Sans",
+                }}
+                arrowStyle={{
+                  color: "white",
+                  fontFamily: "Bubblegum-Sans",
+                }}
+                onChangeItem={(item) =>
+                  setPreviewImage({
+                    previewImage: item.value,
+                  })
+                }
+              />
             </View>
-            <TextInput />
-            <TextInput />
-            <TextInput />
-            <TextInput />
+            <TextInput
+              style={styles.inputFont}
+              onChangeText={(title) => {
+                setTitle(title);
+              }}
+              placeholder="Titulo"
+              placeholderTextColor="white"
+            />
+            <TextInput
+              style={[
+                styles.inputFont,
+                styles.inputFontExtra,
+                styles.inputTextBig,
+              ]}
+              onChangeText={(description) => setDescription(description)}
+              placeholder={"Descripción"}
+              multiline={true}
+              numberOfLines={4}
+              placeholderTextColor="white"
+            />
+            <TextInput
+              style={[
+                styles.inputFont,
+                styles.inputFontExtra,
+                styles.inputTextBig,
+              ]}
+              onChangeText={(story) => {
+                setStory(story);
+              }}
+              placeholder={"Historia"}
+              multiline={true}
+              numberOfLines={20}
+              placeholderTextColor="white"
+            />
+            <TextInput
+              style={[
+                styles.inputFont,
+                styles.inputFontExtra,
+                styles.inputTextBig,
+              ]}
+              onChangeText={(moral) => {
+                setMoral(moral);
+              }}
+              placeholder={"Moraleja de la historia"}
+              multiline={true}
+              numberOfLines={4}
+              placeholderTextColor="white"
+            />
           </ScrollView>
         </View>
-        <View />
+        <View style={{ flex: 0.08 }} />
       </View>
     );
   }
@@ -98,6 +187,34 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: RFValue(28),
     fontFamily: "Bubblegum-Sans",
+  },
+  // Estos estilos se agregaron despues
+  fieldsContainer: {
+    flex: 0.85,
+  },
+  previewImage: {
+    width: "93%",
+    height: RFValue(250),
+    alignSelf: "center",
+    borderRadius: RFValue(10),
+    marginVertical: RFValue(10),
+    resizeMode: "contain",
+  },
+  inputFont: {
+    height: RFValue(40),
+    borderColor: "white",
+    borderWidth: RFValue(1),
+    borderRadius: RFValue(10),
+    paddingLeft: RFValue(10),
+    color: "white",
+    fontFamily: "Bubblegum-Sans",
+  },
+  inputFontExtra: {
+    marginTop: RFValue(15),
+  },
+  inputTextBig: {
+    textAlignVertical: "top",
+    padding: RFValue(5),
   },
 });
 //No olvides exportar tu componente
