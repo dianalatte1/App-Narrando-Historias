@@ -13,8 +13,10 @@ const StoryCard = (props) => {
   });
 
   if (!loaded) {
+    // Si la app aun no carga la fuente muestra el mensaje de cargando....
     return <AppLoading />;
   } else {
+    // Si ya cargo la fuente muestra lo siguiente
     return (
       <View style={styles.container}>
         <View style={styles.cardContainer}>
