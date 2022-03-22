@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
 
 import AppLoading from "expo-app-loading";
@@ -16,7 +16,15 @@ const StoryCard = (props) => {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() =>
+          props.navigation.navigate("PantallaHistoria", {
+            story: props.story,
+          })
+        }
+      >
+        {/* <View style={styles.container}> */}
         <View style={styles.cardContainer}>
           <Image
             source={require("../assets/story_image_1.png")}
@@ -37,7 +45,8 @@ const StoryCard = (props) => {
             </View>
           </View>
         </View>
-      </View>
+        {/* </View> */}
+      </TouchableOpacity>
     );
   }
 };
