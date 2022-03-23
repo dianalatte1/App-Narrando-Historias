@@ -14,7 +14,7 @@ import AppLoading from "expo-app-loading";
 import { FlatList } from "react-native-gesture-handler";
 import StoryCard from "./StoryCard";
 
-const FeedScreen = (props) => {
+const FeedScreen = ({ navigation }) => {
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
@@ -24,7 +24,7 @@ const FeedScreen = (props) => {
   //componente
 
   const renderItem = ({ item: story }) => {
-    return <StoryCard story={story} />;
+    return <StoryCard story={story} navigation={navigation} />;
   };
 
   const keyExtractor = (item, index) => index.toString();
