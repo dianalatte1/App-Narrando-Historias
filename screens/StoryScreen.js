@@ -10,7 +10,8 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+// import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -27,14 +28,14 @@ const StoryScreen = (props) => {
 
   const initiateTTS = async (title, author, story, moral) => {
     const current_color = speakerColor;
-    setSpeakerColor({
-      speakerColor: current_color === "gray" ? "#ee8249" : "gray",
-    });
+    // agregamos la opciones de lenguage, para que lea en español
+    const speakOptions = { language: "es-MX" };
+    setSpeakerColor(current_color === "gray" ? "#ee8249" : "gray");
     if (current_color === "gray") {
-      Speech.speak(`${title} by ${author}`);
-      Speech.speak(story);
-      Speech.speak("¡La moraleja de la historia es!");
-      Speech.speak(moral);
+      Speech.speak(`${title} by ${author}`, speakOptions);
+      Speech.speak(story, speakOptions);
+      Speech.speak("¡La moraleja de la historia es!", speakOptions);
+      Speech.speak(moral, speakOptions);
     } else {
       Speech.stop();
     }
@@ -91,9 +92,9 @@ const StoryScreen = (props) => {
                   }
                 >
                   <Ionicons
-                    name={setSpeakerIcon}
+                    name={speakerIcon}
                     size={RFValue(30)}
-                    color={setSpeakerColor}
+                    color={speakerColor}
                     style={{ margin: RFValue(15) }}
                   />
                 </TouchableOpacity>
