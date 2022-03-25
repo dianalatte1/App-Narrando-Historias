@@ -8,7 +8,6 @@ import {
   StatusBar,
   Image,
   ScrollView,
-  Dimensions,
 } from "react-native";
 // import Ionicons from "@expo/vector-icons/Ionicons";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,7 +31,7 @@ const StoryScreen = (props) => {
     const speakOptions = { language: "es-MX" };
     setSpeakerColor(current_color === "gray" ? "#ee8249" : "gray");
     if (current_color === "gray") {
-      Speech.speak(`${title} by ${author}`, speakOptions);
+      Speech.speak(`${title} by ${author}`, speakOptions); //, speakOptions
       Speech.speak(story, speakOptions);
       Speech.speak("¡La moraleja de la historia es!", speakOptions);
       Speech.speak(moral, speakOptions);
