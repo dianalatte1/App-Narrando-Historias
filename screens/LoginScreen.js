@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Button } from "react-native";
+import { getDatabase, ref, set } from "firebase/database";
 
-import { getAuth, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAdditionalUserInfo,
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
 import * as Google from "expo-google-app-auth";
 
 const LoginScreen = () => {
@@ -24,26 +31,50 @@ const LoginScreen = () => {
 
   const onSignIn = (googleUser) => {
     const auth = getAuth();
-    let unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    let unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       unsubscribe();
       if (!isUserEqual(googleUser, firebaseUser)) {
         const credential = GoogleAuthProvider.credential(
           googleUser.idToken,
           googleUser.accessToken
         );
-        console.log(credential);
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        // const uid = firebaseUser.uid;
-        // ...
+        try {
+          // este result regresa user credential
+          const result = await signInWithCredential(auth, credential);
+
+          console.log(Object.keys(result));
+          console.log(JSON.stringify(result));
+          console.log(result.user);
+
+          const aditional = getAdditionalUserInfo(result);
+          console.log(aditional);
+          if (aditional.isNewUser) {
+            const db = getDatabase();
+            set(ref(db, "users/" + result.user.uid), {
+              gmail: aditional.profile.email,
+              profile_picture: aditional.profile.picture,
+              locale: aditional.profile.locale,
+              first_name: aditional.profile.given_name,
+              last_name: aditional.profile.family_name,
+              current_theme: "dark",
+            });
+          }
+        } catch (error) {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.email;
+          // The credential that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          console.log({ errorCode, errorMessage, email, credential });
+        }
       } else {
-        // User is signed out
-        // ...
+        console.log("User signed out");
       }
     });
   };
 
-  // signInWithGoogleAsync
   async function signInWithGoogleAsync() {
     console.log("hola mundo1");
     try {
@@ -56,16 +87,12 @@ const LoginScreen = () => {
       });
 
       if (result.type === "success") {
-        console.log("hola mundo2");
-        console.log(result);
         onSignIn(result);
         return result.accessToken;
       } else {
-        console.log("hola mundo3");
         return { cancelled: true };
       }
     } catch (e) {
-      console.log("hola mundo4", e);
       return { error: true };
     }
   }
