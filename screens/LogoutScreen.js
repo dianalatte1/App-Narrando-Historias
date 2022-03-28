@@ -7,12 +7,9 @@ const LogoutScreen = () => {
   const auth = getAuth();
   signOut(auth)
     .then(() => {
-      // Sign-out successful.
-
       console.log("Signed Out");
     })
     .catch((e) => {
-      // An error happened.
       console.error("Sign Out Error", e);
     });
 

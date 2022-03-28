@@ -27,16 +27,12 @@ const ProfileScreen = (props) => {
     const userRef = ref(db, "users/" + user.uid);
     onValue(userRef, (snapshot) => {
       const data = snapshot.val();
+      // COMPLETA LOS SIGUIENTE SETS de manera adecuada
+      // setTheme();
+      // setIsEnabled();
 
-      // console.log(data);
-
-      setTheme(data.current_theme === "light");
-      // setIsEnabled(data.current_theme === "light" ? false : true);
-      // setIsEnabled(data.current_theme !== "light" ? true : false);
-      setIsEnabled(data.current_theme !== "light");
-
-      setName(data.first_name);
-      setProfileImage(data.profile_picture);
+      // setName();
+      // setProfileImage();
     });
   }, []);
 
@@ -50,8 +46,9 @@ const ProfileScreen = (props) => {
       [`/users/${user.uid}/current_theme`]: theme,
     };
     update(ref(db), updates);
-    setIsEnabled(!previousState);
-    setTheme(previousState);
+    // si no esta previousState asignalo a setIsEnabled
+
+    // si esta previouState asignalo a setTheme
   };
 
   //cargamos la fuente aqui
@@ -63,9 +60,6 @@ const ProfileScreen = (props) => {
     return <AppLoading />;
   } else {
     return (
-      // <View style={styles.container}>
-      //   <Text>Perfil</Text>
-      // </View>
       <View style={styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
         <View style={styles.appTitle}>
@@ -95,10 +89,12 @@ const ProfileScreen = (props) => {
                 transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
               }}
               trackColor={{ false: "#767577", true: "white" }}
-              thumbColor={isEnabled ? "#ee8249" : "#f4f3f4"}
+              // agrega la propiedad thumbColor que si esta activado nos de un color #ee824 si no #f4f3f4
               ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
+              // coloca toggleSwitch
+              // onValueChange={}
+              // coloca el estado isEnabled
+              // value={}
             />
           </View>
           <View style={{ flex: 0.3 }} />

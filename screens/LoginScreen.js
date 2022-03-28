@@ -39,7 +39,6 @@ const LoginScreen = () => {
           providerData[i].providerId === auth.GoogleAuthProvider.PROVIDER_ID &&
           providerData[i].uid === googleUser.getBasicProfile().getId()
         ) {
-          // No necesitamos reautorizar la conexión con Firebase.
           return true;
         }
       }
@@ -96,9 +95,12 @@ const LoginScreen = () => {
   async function signInWithGoogleAsync() {
     try {
       const result = await Google.logInAsync({
+        // coloca aqui tus credenciales entre comillas
         androidClientId:
+          // android aqui
           "536744882757-vfgvh9qfqlkd0vqpu4sld7g0iajbgjq0.apps.googleusercontent.com",
         iosClientId:
+          // ios aqui
           "536744882757-1regbrs1c3pgda09ddvqhmj18b1d57kj.apps.googleusercontent.com",
         scopes: ["profile", "email"],
       });
@@ -128,10 +130,7 @@ const LoginScreen = () => {
             style={styles.appTitleText}
           >{`Aplicación para narrar historias`}</Text>
         </View>
-        {/* <Button
-          title="Iniciar sesión con Google"
-          onPress={() => signInWithGoogleAsync()}
-        ></Button> */}
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
