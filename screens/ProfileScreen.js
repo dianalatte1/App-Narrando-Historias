@@ -76,9 +76,8 @@ const ProfileScreen = (props) => {
             ></Image>
           </View>
           <View style={styles.appTitleTextContainer}>
-            <Text style={styles.appTitleText}>
-              Aplicación para narrar historias
-            </Text>
+            <Text style={styles.appTitleText}>Aplicación para</Text>
+            <Text style={styles.appTitleText}>narrar historias</Text>
           </View>
         </View>
         <View style={styles.screenContainer}>
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
   },
   appTitleTextContainer: {
     flex: 0.7,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   appTitleText: {
     color: "white",
