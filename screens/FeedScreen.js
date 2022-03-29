@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,12 +9,29 @@ import {
   Platform,
 } from "react-native";
 //todas las librerias que necesites para tu componente
+import { RFValue } from "react-native-responsive-fontsize";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { FlatList } from "react-native-gesture-handler";
 import StoryCard from "./StoryCard";
 
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
+
 const FeedScreen = ({ navigation }) => {
+  const [theme, setTheme] = useState(true);
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const db = getDatabase();
+    const userRef = ref(db, "users/" + user.uid);
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+
+      setTheme(data.current_theme === "light");
+    });
+  }, []);
+
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
@@ -33,7 +50,8 @@ const FeedScreen = ({ navigation }) => {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
+      // esto cambia
+      <View style={theme ? styles.containerLight : styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
         <View style={styles.appTitle}>
           <View style={styles.appIcon}>
@@ -43,7 +61,9 @@ const FeedScreen = ({ navigation }) => {
             ></Image>
           </View>
           <View style={styles.appTitleTextContainer}>
-            <Text style={styles.appTitleText}>
+            <Text
+              style={theme ? styles.appTitleTextLight : styles.appTitleText}
+            >
               Aplicación para narrar historias
             </Text>
           </View>
@@ -66,6 +86,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#15193c",
   },
+  containerLight: {
+    flex: 1,
+    backgroundColor: "white",
+  },
   droidSafeArea: {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
@@ -85,7 +109,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   appTitleTextContainer: {
-    // flex: 0.7,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -94,7 +117,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontFamily: "Bubblegum-Sans",
     paddingLeft: 20,
-    // flexShrink: 1,
+  },
+  appTitleTextLight: {
+    color: "black",
+    fontSize: RFValue(28),
+    fontFamily: "Bubblegum-Sans",
   },
   cardContainer: {
     flex: 0.85,

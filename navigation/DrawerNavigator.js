@@ -1,6 +1,5 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import BottomTabNavigator from "./TabNavigator";
 import ProfileScreen from "../screens/ProfileScreen";
 import StackNavigator from "./StackNavigator";
 import LogoutScreen from "../screens/LogoutScreen";

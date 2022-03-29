@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,7 +18,22 @@ import * as Speech from "expo-speech";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
+
 const StoryScreen = (props) => {
+  const [theme, setTheme] = useState(true);
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const db = getDatabase();
+    const userRef = ref(db, "users/" + user.uid);
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+
+      setTheme(data.current_theme === "light");
+    });
+  }, []);
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
@@ -45,7 +60,8 @@ const StoryScreen = (props) => {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
+      // cambiamos esto
+      <View style={theme ? styles.containerLight : styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
         <View style={styles.appTitle}>
           <View style={styles.appIcon}>
@@ -55,13 +71,17 @@ const StoryScreen = (props) => {
             ></Image>
           </View>
           <View style={styles.appTitleTextContainer}>
-            <Text style={styles.appTitleText}>
+            {/* cambiamos esto */}
+            <Text
+              style={theme ? styles.appTitleTextLight : styles.appTitleText}
+            >
               Aplicación para narrar historias
             </Text>
           </View>
         </View>
         <View style={styles.storyContainer}>
-          <ScrollView style={styles.storyCard}>
+          {/* cambiamos esto */}
+          <ScrollView style={theme ? styles.storyCardLight : styles.storyCard}>
             <Image
               source={require("../assets/story_image_1.png")}
               style={styles.image}
@@ -69,10 +89,20 @@ const StoryScreen = (props) => {
 
             <View style={styles.dataContainer}>
               <View style={styles.titleTextContainer}>
-                <Text style={styles.storyTitleText}>
+                <Text
+                  // cambiamos esto
+                  style={
+                    theme ? styles.storyTitleTextLight : styles.storyTitleText
+                  }
+                >
                   {props.route.params.story.title}
                 </Text>
-                <Text style={styles.storyAuthorText}>
+                <Text
+                  // cambiamos esto
+                  style={
+                    theme ? styles.storyAuthorTextLight : styles.storyAuthorText
+                  }
+                >
                   {props.route.params.story.author}
                 </Text>
                 <Text style={styles.storyAuthorText}>
@@ -100,17 +130,21 @@ const StoryScreen = (props) => {
               </View>
             </View>
             <View style={styles.storyTextContainer}>
-              <Text style={styles.storyText}>
+              {/* cambiamos esto */}
+              <Text style={theme ? styles.storyTextLight : styles.storyText}>
                 {props.route.params.story.story}
               </Text>
-              <Text style={styles.moralText}>
+              {/* cambiamos esto */}
+              <Text style={theme ? styles.moralTextLight : styles.moralText}>
                 Moral - {props.route.params.story.moral}
               </Text>
             </View>
             <View style={styles.actionContainer}>
               <View style={styles.likeButton}>
                 <Ionicons name={"heart"} size={RFValue(30)} color={"white"} />
-                <Text style={styles.likeText}>12m</Text>
+                <Text style={theme ? styles.likeTextLight : styles.likeText}>
+                  12m
+                </Text>
               </View>
             </View>
           </ScrollView>
@@ -123,6 +157,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#15193c",
+  },
+  containerLight: {
+    flex: 1,
+    backgroundColor: "white",
   },
   droidSafeArea: {
     marginTop:
@@ -151,6 +189,11 @@ const styles = StyleSheet.create({
     fontSize: RFValue(28),
     fontFamily: "Bubblegum-Sans",
   },
+  appTitleTextLight: {
+    color: "black",
+    fontSize: RFValue(28),
+    fontFamily: "Bubblegum-Sans",
+  },
   storyContainer: {
     flex: 1,
   },
@@ -158,6 +201,19 @@ const styles = StyleSheet.create({
     margin: RFValue(20),
     backgroundColor: "#2f345d",
     borderRadius: RFValue(20),
+  },
+  storyCardLight: {
+    margin: RFValue(20),
+    backgroundColor: "white",
+    borderRadius: RFValue(20),
+    shadowColor: "rgb(0, 0, 0)",
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 2,
   },
   image: {
     width: "100%",
@@ -184,6 +240,11 @@ const styles = StyleSheet.create({
     fontSize: RFValue(18),
     color: "white",
   },
+  storyAuthorTextLight: {
+    fontFamily: "Bubblegum-Sans",
+    fontSize: RFValue(18),
+    color: "black",
+  },
   iconContainer: {
     flex: 0.2,
   },
@@ -195,10 +256,20 @@ const styles = StyleSheet.create({
     fontSize: RFValue(15),
     color: "white",
   },
+  storyTextLight: {
+    fontFamily: "Bubblegum-Sans",
+    fontSize: RFValue(15),
+    color: "black",
+  },
   moralText: {
     fontFamily: "Bubblegum-Sans",
     fontSize: RFValue(20),
     color: "white",
+  },
+  moralTextLight: {
+    fontFamily: "Bubblegum-Sans",
+    fontSize: RFValue(20),
+    color: "black",
   },
   actionContainer: {
     justifyContent: "center",
@@ -216,6 +287,11 @@ const styles = StyleSheet.create({
   },
   likeText: {
     color: "white",
+    fontFamily: "Bubblegum-Sans",
+    fontSize: RFValue(25),
+    marginLeft: RFValue(5),
+  },
+  likeTextLight: {
     fontFamily: "Bubblegum-Sans",
     fontSize: RFValue(25),
     marginLeft: RFValue(5),
