@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FeedScreen from "../screens/FeedScreen";
 import CreateStoryScreen from "../screens/CreateStoryScreen";
@@ -6,14 +6,31 @@ import CreateStoryScreen from "../screens/CreateStoryScreen";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { StyleSheet } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
+
 //se sustituye por TabNavigator
 const Tab = createMaterialBottomTabNavigator();
 
-const TabNavigator = () => {
+export default function TabNavigator() {
+  const [theme, setTheme] = useState(true);
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const db = getDatabase();
+    const userRef = ref(db, "users/" + user.uid);
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+
+      setTheme(data.current_theme === "light");
+    });
+  }, []);
   return (
     <Tab.Navigator
       labeled={false}
-      barStyle={styles.bottomTabStyle}
+      // cambiamos esto
+      barStyle={theme ? styles.bottomTabStyleLight : styles.bottomTabStyle}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -39,7 +56,7 @@ const TabNavigator = () => {
       <Tab.Screen name="CreateStory" component={CreateStoryScreen} />
     </Tab.Navigator>
   );
-};
+}
 
 // Se añaden algunos estilos para nuestro inicio
 const styles = StyleSheet.create({
@@ -51,9 +68,16 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     position: "absolute",
   },
+  bottomTabStyleLight: {
+    backgroundColor: "#eaeaea",
+    height: "8%",
+    borderTopLeftRadius: RFValue(30),
+    borderTopRightRadius: RFValue(30),
+    overflow: "hidden",
+    position: "absolute",
+  },
   icons: {
     width: RFValue(30),
     height: RFValue(30),
   },
 });
-export default TabNavigator;

@@ -6,7 +6,12 @@ import StoryScreen from "../screens/StoryScreen";
 const Stack = createStackNavigator();
 const StackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName="Inicio"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="Inicio" component={TabNavigator} />
       <Stack.Screen name="PantallaHistoria" component={StoryScreen} />
     </Stack.Navigator>
