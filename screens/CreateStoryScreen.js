@@ -11,7 +11,6 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
-//todas las librerias que necesites para tu componente
 import { RFValue } from "react-native-responsive-fontsize";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
@@ -32,7 +31,6 @@ const CreateStoryScreen = (props) => {
       setTheme(data.current_theme === "light");
     });
   }, []);
-  //cargamos la fuente aqui
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
@@ -61,7 +59,6 @@ const CreateStoryScreen = (props) => {
       image_5: require("../assets/story_image_5.png"),
     };
     return (
-      // cambiamos esto
       <View style={theme ? styles.containerLight : styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
         <View style={styles.appTitle}>
@@ -72,7 +69,6 @@ const CreateStoryScreen = (props) => {
             ></Image>
           </View>
           <View style={styles.appTitleTextContainer}>
-            {/* cambiamos esto */}
             <Text
               style={theme ? styles.appTitleTextLight : styles.appTitleText}
             >
@@ -107,17 +103,13 @@ const CreateStoryScreen = (props) => {
                 onClose={() => {
                   setDropDownHeight(40);
                 }}
-                // style={{ backgroundColor: "transparent" }}
                 itemStyle={{
                   justifyContent: "flex-start",
                 }}
-                // cambiamos esto
                 dropDownStyle={{ backgroundColor: theme ? "#eee" : "#2f345d" }}
-                // cambiamos esto
                 labelStyle={
                   theme ? styles.dropdownLabelLight : styles.dropdownLabel
                 }
-                // cambiamos esto
                 arrowStyle={
                   theme ? styles.dropdownLabelLight : styles.dropdownLabel
                 }
@@ -125,7 +117,6 @@ const CreateStoryScreen = (props) => {
               />
             </View>
             <View style={{ marginHorizontal: RFValue(10) }}>
-              {/* cambiamos esto */}
               <TextInput
                 style={[
                   theme ? styles.inputFontLight : styles.inputFont,
@@ -136,11 +127,9 @@ const CreateStoryScreen = (props) => {
                   setTitle(title);
                 }}
                 placeholder="Titulo"
-                // cambiamos esto
                 placeholderTextColor={theme ? "black" : "white"}
               />
               <TextInput
-                // cambiamos esto
                 style={[
                   theme ? styles.inputFontLight : styles.inputFont,
                   styles.inputFontExtra,
@@ -150,12 +139,10 @@ const CreateStoryScreen = (props) => {
                 placeholder={"Descripción"}
                 multiline={true}
                 numberOfLines={4}
-                // cambiamos esto
                 placeholderTextColor={theme ? "black" : "white"}
               />
               <TextInput
                 style={[
-                  // cambiamos esto
                   theme ? styles.inputFontLight : styles.inputFont,
                   styles.inputFontExtra,
                   styles.inputTextBig,
@@ -166,12 +153,10 @@ const CreateStoryScreen = (props) => {
                 placeholder={"Historia"}
                 multiline={true}
                 numberOfLines={20}
-                // cambiamos esto
                 placeholderTextColor={theme ? "black" : "white"}
               />
               <TextInput
                 style={[
-                  // cambiamos esto
                   theme ? styles.inputFontLight : styles.inputFont,
                   styles.inputFontExtra,
                   styles.inputTextBig,
@@ -194,7 +179,6 @@ const CreateStoryScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  //Aquí van todos los estilos para tu componente
   container: {
     flex: 1,
     backgroundColor: "#15193c",
@@ -235,10 +219,8 @@ const styles = StyleSheet.create({
     fontSize: RFValue(28),
     fontFamily: "Bubblegum-Sans",
   },
-  // Estos estilos se agregaron despues
   fieldsContainer: {
     flex: 0.85,
-    // height: 5,
   },
   previewImage: {
     width: "93%",
@@ -282,5 +264,4 @@ const styles = StyleSheet.create({
     fontFamily: "Bubblegum-Sans",
   },
 });
-//No olvides exportar tu componente
 export default CreateStoryScreen;
