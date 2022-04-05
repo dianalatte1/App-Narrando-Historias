@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// Importamos un button y un alert
 import {
   View,
   Text,
@@ -9,15 +10,15 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
-  Dimensions,
+  Button,
+  Alert,
 } from "react-native";
-//todas las librerias que necesites para tu componente
 import { RFValue } from "react-native-responsive-fontsize";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 
 const CreateStoryScreen = (props) => {
   const [theme, setTheme] = useState(true);
@@ -28,20 +29,48 @@ const CreateStoryScreen = (props) => {
     const userRef = ref(db, "users/" + user.uid);
     onValue(userRef, (snapshot) => {
       const data = snapshot.val();
-
       setTheme(data.current_theme === "light");
     });
   }, []);
-  //cargamos la fuente aqui
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
+
+  const addStory = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (title && description && story && moral) {
+      const db = getDatabase();
+      const postId = Math.random().toString(36).slice(2);
+      set(ref(db, "posts/" + postId), {
+        preview_image: previewImage,
+        title: title,
+        description: description,
+        story: story,
+        moral: moral,
+        author: user.displayName,
+        created_on: new Date(),
+        author_uid: user.uid,
+        likes: 0,
+      });
+      props.setUpdatedToTrue();
+      props.navigation.navigate("FeedScreen");
+    } else {
+      Alert.alert(
+        "Error",
+        "¡Todos los campos son requeridos!",
+        [{ text: "OK", onPress: () => console.log("OK presionado") }],
+        { cancelable: false }
+      );
+    }
+  };
+
   const [previewImage, setPreviewImage] = useState("image_1");
   const [dropDownHeight, setDropDownHeight] = useState(40);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [moral, setMoral] = useState("");
-  const [story, setStory] = useState("");
+  const [title, setTitle] = useState("Dummy title");
+  const [description, setDescription] = useState("dummy description");
+  const [moral, setMoral] = useState("Dummy moral");
+  const [story, setStory] = useState("dummy story");
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: "Image 1", value: "image_1" },
@@ -61,7 +90,6 @@ const CreateStoryScreen = (props) => {
       image_5: require("../assets/story_image_5.png"),
     };
     return (
-      // cambiamos esto
       <View style={theme ? styles.containerLight : styles.container}>
         <SafeAreaView style={styles.droidSafeArea} />
         <View style={styles.appTitle}>
@@ -72,7 +100,6 @@ const CreateStoryScreen = (props) => {
             ></Image>
           </View>
           <View style={styles.appTitleTextContainer}>
-            {/* cambiamos esto */}
             <Text
               style={theme ? styles.appTitleTextLight : styles.appTitleText}
             >
@@ -107,17 +134,13 @@ const CreateStoryScreen = (props) => {
                 onClose={() => {
                   setDropDownHeight(40);
                 }}
-                // style={{ backgroundColor: "transparent" }}
                 itemStyle={{
                   justifyContent: "flex-start",
                 }}
-                // cambiamos esto
                 dropDownStyle={{ backgroundColor: theme ? "#eee" : "#2f345d" }}
-                // cambiamos esto
                 labelStyle={
                   theme ? styles.dropdownLabelLight : styles.dropdownLabel
                 }
-                // cambiamos esto
                 arrowStyle={
                   theme ? styles.dropdownLabelLight : styles.dropdownLabel
                 }
@@ -125,7 +148,6 @@ const CreateStoryScreen = (props) => {
               />
             </View>
             <View style={{ marginHorizontal: RFValue(10) }}>
-              {/* cambiamos esto */}
               <TextInput
                 style={[
                   theme ? styles.inputFontLight : styles.inputFont,
@@ -136,11 +158,11 @@ const CreateStoryScreen = (props) => {
                   setTitle(title);
                 }}
                 placeholder="Titulo"
-                // cambiamos esto
                 placeholderTextColor={theme ? "black" : "white"}
+                // value="dummy value"
+                value={title}
               />
               <TextInput
-                // cambiamos esto
                 style={[
                   theme ? styles.inputFontLight : styles.inputFont,
                   styles.inputFontExtra,
@@ -150,12 +172,11 @@ const CreateStoryScreen = (props) => {
                 placeholder={"Descripción"}
                 multiline={true}
                 numberOfLines={4}
-                // cambiamos esto
                 placeholderTextColor={theme ? "black" : "white"}
+                value={description}
               />
               <TextInput
                 style={[
-                  // cambiamos esto
                   theme ? styles.inputFontLight : styles.inputFont,
                   styles.inputFontExtra,
                   styles.inputTextBig,
@@ -166,12 +187,12 @@ const CreateStoryScreen = (props) => {
                 placeholder={"Historia"}
                 multiline={true}
                 numberOfLines={20}
-                // cambiamos esto
                 placeholderTextColor={theme ? "black" : "white"}
+                // value="dummy value story"
+                value={story}
               />
               <TextInput
                 style={[
-                  // cambiamos esto
                   theme ? styles.inputFontLight : styles.inputFont,
                   styles.inputFontExtra,
                   styles.inputTextBig,
@@ -183,6 +204,16 @@ const CreateStoryScreen = (props) => {
                 multiline={true}
                 numberOfLines={4}
                 placeholderTextColor={theme ? "black" : "white"}
+                // value="dummy value moral"
+                value={moral}
+              />
+            </View>
+            {/* usamos nuetro Button */}
+            <View>
+              <Button
+                onPress={() => addStory()}
+                title="Subir"
+                color="#841584"
               />
             </View>
           </ScrollView>
@@ -194,7 +225,6 @@ const CreateStoryScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  //Aquí van todos los estilos para tu componente
   container: {
     flex: 1,
     backgroundColor: "#15193c",
@@ -235,10 +265,8 @@ const styles = StyleSheet.create({
     fontSize: RFValue(28),
     fontFamily: "Bubblegum-Sans",
   },
-  // Estos estilos se agregaron despues
   fieldsContainer: {
     flex: 0.85,
-    // height: 5,
   },
   previewImage: {
     width: "93%",
@@ -282,5 +310,4 @@ const styles = StyleSheet.create({
     fontFamily: "Bubblegum-Sans",
   },
 });
-//No olvides exportar tu componente
 export default CreateStoryScreen;

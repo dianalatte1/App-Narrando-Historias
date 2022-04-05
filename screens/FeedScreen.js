@@ -18,8 +18,9 @@ import StoryCard from "./StoryCard";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
 
-const FeedScreen = ({ navigation }) => {
+const FeedScreen = (props) => {
   const [theme, setTheme] = useState(true);
+  const [stories, setStories] = useState([]);
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -31,17 +32,33 @@ const FeedScreen = ({ navigation }) => {
       setTheme(data.current_theme === "light");
     });
   }, []);
+  // aqui crear el otro useeffect
+  useEffect(() => {
+    const db = getDatabase();
+    const userRef = ref(db, "posts");
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+      const storiesTemp = [];
+      if (!data) {
+        return;
+      }
+      Object.keys(data).forEach((key) => {
+        storiesTemp.push({
+          key: key,
+          value: data[key],
+        });
+      });
+      setStories(storiesTemp);
+      props.setUpdatedToFalse();
+    });
+  }, []);
 
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
 
-  let stories = require("./temp.json");
-  //Aquí va toda la funcionalidad que quieras para tu
-  //componente
-
   const renderItem = ({ item: story }) => {
-    return <StoryCard story={story} navigation={navigation} />;
+    return <StoryCard story={story} navigation={props.navigation} />;
   };
 
   const keyExtractor = (item, index) => index.toString();
@@ -68,20 +85,31 @@ const FeedScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        <View style={styles.cardContainer}>
-          <FlatList
-            keyExtractor={keyExtractor}
-            data={stories}
-            renderItem={renderItem}
-          />
-        </View>
+        {/* AQUI AGREGAR CODIGO */}
+        {!stories[0] ? (
+          <View style={styles.noStories}>
+            <Text
+              style={theme ? styles.noStoriesTextLight : styles.noStoriesText}
+            >
+              No hay historias disponibles
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.cardContainer}>
+            <FlatList
+              keyExtractor={keyExtractor}
+              data={stories}
+              renderItem={renderItem}
+            />
+          </View>
+        )}
+        <View style={{ flex: 0.08 }} />
       </View>
     );
   }
 };
 
 const styles = StyleSheet.create({
-  //Aquí van todos los estilos para tu componente
   container: {
     flex: 1,
     backgroundColor: "#15193c",
@@ -125,6 +153,20 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     flex: 0.85,
+  },
+  noStories: {
+    flex: 0.85,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noStoriesTextLight: {
+    fontSize: RFValue(40),
+    fontFamily: "Bubblegum-Sans",
+  },
+  noStoriesText: {
+    color: "white",
+    fontSize: RFValue(40),
+    fontFamily: "Bubblegum-Sans",
   },
 });
 //No olvides exportar tu componente

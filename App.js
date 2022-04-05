@@ -10,6 +10,7 @@ import firebaseConfig from "./config";
 
 if (getApps().length < 1) {
   initializeApp(firebaseConfig);
+  console.log("estoy funcionando");
 }
 
 const AppSwitchNavigator = createSwitchNavigator({
