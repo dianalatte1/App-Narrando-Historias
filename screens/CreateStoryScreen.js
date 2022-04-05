@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// Importamos un button y un alert
 import {
   View,
   Text,
@@ -9,14 +10,15 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
-  Dimensions,
+  Button,
+  Alert,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 
 const CreateStoryScreen = (props) => {
   const [theme, setTheme] = useState(true);
@@ -27,19 +29,48 @@ const CreateStoryScreen = (props) => {
     const userRef = ref(db, "users/" + user.uid);
     onValue(userRef, (snapshot) => {
       const data = snapshot.val();
-
       setTheme(data.current_theme === "light");
     });
   }, []);
   const [loaded] = useFonts({
     "Bubblegum-Sans": require("../assets/fonts/BubblegumSans-Regular.ttf"),
   });
+
+  const addStory = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (title && description && story && moral) {
+      const db = getDatabase();
+      const postId = Math.random().toString(36).slice(2);
+      set(ref(db, "posts/" + postId), {
+        preview_image: previewImage,
+        title: title,
+        description: description,
+        story: story,
+        moral: moral,
+        author: user.displayName,
+        created_on: new Date(),
+        author_uid: user.uid,
+        likes: 0,
+      });
+      props.setUpdatedToTrue();
+      props.navigation.navigate("FeedScreen");
+    } else {
+      Alert.alert(
+        "Error",
+        "¡Todos los campos son requeridos!",
+        [{ text: "OK", onPress: () => console.log("OK presionado") }],
+        { cancelable: false }
+      );
+    }
+  };
+
   const [previewImage, setPreviewImage] = useState("image_1");
   const [dropDownHeight, setDropDownHeight] = useState(40);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [moral, setMoral] = useState("");
-  const [story, setStory] = useState("");
+  const [title, setTitle] = useState("Dummy title");
+  const [description, setDescription] = useState("dummy description");
+  const [moral, setMoral] = useState("Dummy moral");
+  const [story, setStory] = useState("dummy story");
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: "Image 1", value: "image_1" },
@@ -128,6 +159,8 @@ const CreateStoryScreen = (props) => {
                 }}
                 placeholder="Titulo"
                 placeholderTextColor={theme ? "black" : "white"}
+                // value="dummy value"
+                value={title}
               />
               <TextInput
                 style={[
@@ -140,6 +173,7 @@ const CreateStoryScreen = (props) => {
                 multiline={true}
                 numberOfLines={4}
                 placeholderTextColor={theme ? "black" : "white"}
+                value={description}
               />
               <TextInput
                 style={[
@@ -154,6 +188,8 @@ const CreateStoryScreen = (props) => {
                 multiline={true}
                 numberOfLines={20}
                 placeholderTextColor={theme ? "black" : "white"}
+                // value="dummy value story"
+                value={story}
               />
               <TextInput
                 style={[
@@ -168,6 +204,16 @@ const CreateStoryScreen = (props) => {
                 multiline={true}
                 numberOfLines={4}
                 placeholderTextColor={theme ? "black" : "white"}
+                // value="dummy value moral"
+                value={moral}
+              />
+            </View>
+            {/* usamos nuetro Button */}
+            <View>
+              <Button
+                onPress={() => addStory()}
+                title="Subir"
+                color="#841584"
               />
             </View>
           </ScrollView>

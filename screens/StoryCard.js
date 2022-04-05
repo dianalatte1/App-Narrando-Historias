@@ -12,6 +12,9 @@ const StoryCard = (props) => {
   //Aquí va toda la funcionalidad que quieras para tu
   //componente
   const [theme, setTheme] = useState(true);
+  const [storyId, setStoryId] = useState(props.story.key);
+  const [storyData, setStoryData] = useState(props.story.value);
+
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -30,6 +33,14 @@ const StoryCard = (props) => {
   if (!loaded) {
     return <AppLoading />;
   } else {
+    let images = {
+      image_1: require("../assets/story_image_1.png"),
+      image_2: require("../assets/story_image_2.png"),
+      image_3: require("../assets/story_image_3.png"),
+      image_4: require("../assets/story_image_4.png"),
+      image_5: require("../assets/story_image_5.png"),
+    };
+    console.log("story card", props.story);
     return (
       <TouchableOpacity
         style={styles.container}
@@ -42,7 +53,7 @@ const StoryCard = (props) => {
         {/* cambiamos esto */}
         <View style={theme ? styles.cardContainerLight : styles.cardContainer}>
           <Image
-            source={require("../assets/story_image_1.png")}
+            source={images[storyData.preview_image]}
             style={styles.storyImage}
           ></Image>
 
@@ -51,7 +62,7 @@ const StoryCard = (props) => {
             <Text
               style={theme ? styles.storyTitleTextLight : styles.storyTitleText}
             >
-              {props.story.title}
+              {storyData.title}
             </Text>
             {/* cambiamos esto */}
             <Text
@@ -59,7 +70,7 @@ const StoryCard = (props) => {
                 theme ? styles.storyAuthorTextLight : styles.storyAuthorText
               }
             >
-              {props.story.author}
+              {storyData.author}
             </Text>
             {/* cambiamos esto */}
             <Text
@@ -67,7 +78,7 @@ const StoryCard = (props) => {
                 theme ? styles.descriptionTextLight : styles.descriptionText
               }
             >
-              {props.story.description}
+              {storyData.description}
             </Text>
           </View>
           <View style={styles.actionContainer}>

@@ -8,9 +8,21 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Inicio" component={StackNavigator} />
-      <Drawer.Screen name="Perfil" component={ProfileScreen} />
-      <Drawer.Screen name="Cerrar Sesión" component={LogoutScreen} />
+      <Drawer.Screen
+        name="Inicio"
+        component={StackNavigator}
+        options={{ unmountOnBlur: true }}
+      />
+      <Drawer.Screen
+        name="Perfil"
+        component={ProfileScreen}
+        options={{ unmountOnBlur: true }}
+      />
+      <Drawer.Screen
+        name="Cerrar Sesión"
+        component={LogoutScreen}
+        options={{ unmountOnBlur: true }}
+      />
     </Drawer.Navigator>
   );
 };
